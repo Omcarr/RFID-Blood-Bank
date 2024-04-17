@@ -2,7 +2,7 @@
 
 
 <br>
-<h2>thank you for visiting</h2>
+<h2>Thank you for visiting, {{ request.user.username }}!</h2>
 <br>
-<a href="{% url 'register' %}"><h2>Register</h2></a>
+<a href="{% url 'CreateDrive' %}"><h2>Create a Drive</h2></a>
 <a href="{% url 'logout' %}"><h2>Logout</h2></a>

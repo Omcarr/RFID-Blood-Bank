@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .decoraters import unauth_user
 from django.contrib.auth.models import Group
-from .forms import DonorForm,CreateUserForm
+from .forms import DonorForm,CreateUserForm,DonationDriveForm
 from django.core.mail import send_mail
 
 
@@ -15,13 +15,13 @@ from django.core.mail import send_mail
 
 @login_required(login_url='login')
 def home(request):
-    send_mail(
-    "Thank you for registration",
-    "Here is the message. hviuefvgebnv;oef vjkebvernv e",
-    "dummy.bloodbank1@gmail.com",
-    ["primesussy@gmail.com"],
-    fail_silently=False,
-)
+#     send_mail(
+#     "Thank you for registration",
+#     "Here is the message. hviuefvgebnv;oef vjkebvernv e",
+#     "dummy.bloodbank1@gmail.com",
+#     ["primesussy@gmail.com"],
+#     fail_silently=False,
+# )
     return render(request,'BloodBank/home.html')
 
 
@@ -44,21 +44,8 @@ def loginPage(request):
     
 
 def logoutUser(request):
-	logout(request) #django inbuilt logout function
+	logout(request)
 	return redirect('login')
-
-
-def register(request):
-    form=DonorForm()
-    if request.method=='POST':
-        form=DonorForm(request.POST)
-        if form.is_valid():
-            form.save()
-    
-            return redirect('/')
-
-    context={'form':form}
-    return render(request,'BloodBank/register.html',context)
 
 @unauth_user
 def Admin_register(request):
@@ -67,8 +54,57 @@ def Admin_register(request):
         form=CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-    
             return redirect('/')
 
     context={'form':form}
     return render(request,'BloodBank/admin_form.html',context)
+
+
+@login_required(login_url='login')
+def CreateDrive(request):
+    form=DonationDriveForm()
+    #get names of all veneues from db and only let the drive sav eif the venue name was unique else throw an error
+    if request.method=='POST':
+        form=DonationDriveForm(request.POST)
+        if form.is_valid():
+            venue = form.cleaned_data['Venue']
+            group = Group.objects.create(name=venue)
+            form.instance.group = group  # Associate group with the form instance
+            form.save()
+            return redirect('register', group_id=group.id)
+
+    context={'form':form}
+    return render(request,'BloodBank/new_drive.html',context)
+
+
+@login_required(login_url='login')
+def register(request,group_id):
+    form=DonorForm()
+    group = Group.objects.get(id=group_id)
+
+    if request.method=='POST':
+        form=DonorForm(request.POST)
+        if form.is_valid():
+            form.instance.group = group 
+            username = form.cleaned_data['Name']
+            user = User.objects.create_user(username=username)
+            user.save()
+
+            # Associate the user with the donor
+            donor = form.save(commit=False)
+            donor.user = user
+            donor.group = group
+            donor.save()
+
+            group.user_set.add(user)
+
+            return redirect('register', group_id=group.id)
+
+    context={'form':form,'group_id': group_id}
+    return render(request,'BloodBank/register.html',context)
+
+
+
+#to-do
+#unique drive name fix
+#mail to the donor when register for a drive along with an attchment
