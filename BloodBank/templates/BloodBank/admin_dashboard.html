@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Admin Dashboard</h1>
+    <h2>Drives Created by You:</h2>
+    <ul>
+        {% for drive in drives %}
+        <li><a href="{% url 'drive_dets' drive.Venue %}">{{ drive.Venue }}</a> - {{ drive.date_created }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

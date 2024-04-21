@@ -4,5 +4,6 @@
 <br>
 <h2>Thank you for visiting, {{ request.user.username }}!</h2>
 <br>
+<h2><a href="{% url 'admin_dashboard' %}">Dashbaord View</a></h2>
 <a href="{% url 'CreateDrive' %}"><h2>Create a Drive</h2></a>
 <a href="{% url 'logout' %}"><h2>Logout</h2></a>

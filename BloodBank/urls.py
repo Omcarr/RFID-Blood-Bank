@@ -10,4 +10,7 @@ urlpatterns =[
     path('Admin_register/', views.Admin_register, name="Admin_register"),
     path('CreateDrive/', views.CreateDrive, name="CreateDrive"),
 
+    path('admin_dashboard/', views.admin_dashboard, name="admin_dashboard"),
+    path('drive/<str:drive_name>/', views.drive_details, name='drive_dets'),
+
 ]

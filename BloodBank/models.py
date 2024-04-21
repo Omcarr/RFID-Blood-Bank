@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
@@ -25,6 +25,7 @@ class Donor(models.Model):
         ('O+', 'O+'),
         ('O-', 'O-'),
     ]
+	groups = models.ManyToManyField(Group) 
 	# user = models.ForeignKey(User, on_delete=models.CASCADE,default='John Doe') 
 	Name = models.CharField(max_length=200,null=True)
 	Age = models.PositiveIntegerField(
@@ -39,7 +40,7 @@ class Donor(models.Model):
 	RFID=models.CharField(max_length=20,null=True)
 	unit_status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Donated')
 
-	# profile_pic = models.ImageField(default="default_pfp.png", null=True, blank=True)
+	#profile_pic = models.ImageField(default="default_pfp.png", null=True, blank=True)
 
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	def __str__(self):
@@ -50,7 +51,14 @@ class DonationDrive(models.Model):
 	Venue = models.CharField(max_length=200, null=True)
 	Pincode = models.CharField(max_length=200, null=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	def __str__(self):
 			return self.Venue
 
+
+class DriveGroup(models.Model):
+    drive = models.ForeignKey(DonationDrive, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.drive.Venue} - Group {self.pk}"
 

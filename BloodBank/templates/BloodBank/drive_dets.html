@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drive Details</title>
+</head>
+<body>
+    <h1>Donors in {{ drive.Venue }}</h1>
+    <ul>
+        {% for donor in donors %}
+            <li>{{ donor.Bloodgroup }} - {{ donor.count }}</li>
+        {% endfor %}
+        {% for donor in donor_list %}
+            <li>{{ donor.Name}}-{{ donor.Bloodgroup }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
