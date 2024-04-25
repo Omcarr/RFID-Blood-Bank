@@ -20,7 +20,7 @@ class DonorForm(ModelForm):
     class Meta:
         model=Donor
         fields='__all__'
-        exclude=['unit_status','groups','profile_pic']
+        exclude=['unit_status','groups','profile_pic','RFID']
 
 class DonationDriveForm(ModelForm):
     class Meta:

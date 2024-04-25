@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(Donor)
 admin.site.register(DonationDrive)
+admin.site.register(RFIDTag)
