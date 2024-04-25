@@ -35,14 +35,14 @@ def home(request):
 # )
     return render(request,'BloodBank/home.html')
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 #@allowed_user(['admin0'])
 def AdminHome(request):
     context={}
     return render(request,'BloodBank/adminhome.html',context)
 
 
-# @unauth_user
+@unauth_user
 def loginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -53,7 +53,7 @@ def loginPage(request):
         if user is not None:
             login(request, user) #django inbuilt login fucntion
             print('logged in')
-            return redirect('home')
+            return redirect('admin_dashboard')
         else:
             messages.info(request, 'Username OR password is incorrect')
 
@@ -65,7 +65,7 @@ def logoutUser(request):
 	logout(request)
 	return redirect('login')
 
-# @unauth_user
+@unauth_user
 def Admin_register(request):
     form=CreateAdminForm()
     if request.method=='POST':
@@ -78,7 +78,7 @@ def Admin_register(request):
     return render(request,'BloodBank/admin_form.html',context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def CreateDrive(request):
     form=DonationDriveForm()
     if request.method == 'POST':
@@ -102,7 +102,7 @@ def CreateDrive(request):
     return render(request,'BloodBank/new_drive.html',context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def register(request, group_id):
     form = DonorForm()
     group = Group.objects.get(id=group_id)
@@ -134,7 +134,7 @@ def register(request, group_id):
     return render(request, 'BloodBank/register.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def admin_dashboard(request):
     drives = DonationDrive.objects.filter(created_by=request.user)[::-1]  #passing in as recent first order
     context = {'drives': drives}
@@ -152,7 +152,7 @@ def admin_dashboard(request):
 #     context = {'drive':drive, 'donors': donor_blood_group,'donor_list':donor_list,'group_id':group_id,'drive_name':drive_name}
 #     return render(request, 'BloodBank/drive_dets.html', context)
 
-
+@login_required(login_url='login')
 def drive_details(request, drive_name):
     drive = Group.objects.get(name=drive_name)
     group_id = drive.id
