@@ -42,6 +42,7 @@ class Donor(models.Model):
         ])
     Sex = models.CharField(max_length=20, choices=SEX_CHOICES, null=True)
     Bloodgroup = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)
+
     Phone = models.CharField(max_length=15, null=True)
     Email = models.CharField(max_length=100, null=True)
     unit_status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Donated')

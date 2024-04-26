@@ -186,19 +186,22 @@ def rfid_val(request):
             logger.info(f"Received RFID value: {rfid_value}")
             print(rfid_value)
             rfid_value=str(rfid_value)
-            if rfid_value[0]=='1':
-                rfid_value=rfid_value[1:]
-                rfid_tag = RFIDTag.objects.create(RFID=rfid_value)
-            elif rfid_value[0]=='0':
-                rfid_value=rfid_value[1:]
-                try:
-                    donor = Donor.objects.get(RFID__RFID=rfid_value)
-                except:
-                    print("Donor with RFID value '{}' not found.".format(rfid_value))
-                else:
-                    donor.unit_status = 'Utilized'
-                    donor.save()
-                    print("Donor '{}' status updated to 'Utilized'.".format(donor))
+            if rfid_val in ['0000000', '1000000']:
+                print("Skipping adding to the database for RFID value '{}'.".format(rfid_val))
+            else:
+                if rfid_value[0]=='1':
+                    rfid_value=rfid_value[1:]
+                    rfid_tag = RFIDTag.objects.create(RFID=rfid_value)
+                elif rfid_value[0]=='0':
+                    rfid_value=rfid_value[1:]
+                    try:
+                        donor = Donor.objects.get(RFID__RFID=rfid_value)
+                    except:
+                        print("Donor with RFID value '{}' not found.".format(rfid_value))
+                    else:
+                        donor.unit_status = 'Utilized'
+                        donor.save()
+                        print("Donor '{}' status updated to 'Utilized'.".format(donor))
 
             return render(request, 'BloodBank/rfid_val.html', {'rfid_value': rfid_value})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -284,3 +287,10 @@ def transfer_to_main(request, drive_name):
 #     #     logger.info("GET request received")
 #     #     # Handle GET requests (optional)
 #     #     return Response("GET request received", status=status.HTTP_200_OK)
+
+
+
+#FIXES
+# admin regsiter blackbox
+#login page css
+

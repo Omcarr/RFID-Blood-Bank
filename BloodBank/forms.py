@@ -16,11 +16,32 @@ class CreateAdminForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
           
-class DonorForm(ModelForm):
+class DonorForm(forms.ModelForm):
     class Meta:
-        model=Donor
-        fields='__all__'
-        exclude=['unit_status','groups','profile_pic','RFID']
+        model = Donor
+        fields = '__all__'
+        exclude = ['unit_status', 'groups', 'profile_pic', 'RFID']
+
+    SEX_CHOICES = [
+        ('', 'Sex'),  # Placeholder option
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Transgender', 'Transgender'),
+    ]
+    BLOOD_GROUP_CHOICES = [
+        ('', 'Blood Group'),  # Placeholder option
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+    ]
+
+    Sex = forms.ChoiceField(choices=SEX_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    Bloodgroup = forms.ChoiceField(choices=BLOOD_GROUP_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
 class DonationDriveForm(ModelForm):
     class Meta:
