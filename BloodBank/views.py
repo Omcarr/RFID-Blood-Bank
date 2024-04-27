@@ -12,6 +12,8 @@ from django.db import transaction
 from django.http import JsonResponse
 
 from collections import defaultdict
+from django.utils import timezone
+
 
 
 from rest_framework.decorators import api_view
@@ -26,13 +28,6 @@ import logging
 # @login_required(login_url='login')
 # @allowed_user(allowed_roles=['AdminLvl0'])
 def home(request):
-#     send_mail(
-#     "Thank you for registration",
-#     "Here is the message. hviuefvgebnv;oef vjkebvernv e",
-#     "dummy.bloodbank1@gmail.com",
-#     ["primesussy@gmail.com"],
-#     fail_silently=False,
-# )
     return render(request,'BloodBank/home.html')
 
 @login_required(login_url='login')
@@ -120,13 +115,12 @@ def register(request, group_id):
             # Associate the user with the donor and the group
             donor = form.save(commit=False)
             donor.user = user
-            # latest_rfid_tag = RFIDTag.objects.latest('id')
-            # #rfid_tag = RFIDTag.objects.get_or_create(RFID=rfid_value)[0]  # Retrieve or create the RFIDTag instance
-            # donor.RFID = latest_rfid_tag.RFID
             latest_rfid_tag = RFIDTag.objects.latest('id')
             donor.RFID = latest_rfid_tag
             donor.save()
             donor.groups.add(group)  # Associate the donor with the group
+            current_date = timezone.now().date()
+            register_mail(donor_name=username, donation_date=current_date, donation_venue=group.name, donor_email=donor.Email)
 
             return redirect('register', group_id=group.id)
 
@@ -158,14 +152,14 @@ def drive_details(request, drive_name):
     group_id = drive.id
     
     # Filter donors with a status of 'Donated'
-    donor_list = Donor.objects.filter(groups=drive, unit_status='Donated')
+    donor_list = Donor.objects.filter(groups=drive).order_by('-id')
     
     # Aggregate donor counts by blood group
-    donor_blood_group = donor_list.values('Bloodgroup').annotate(count=Count('Bloodgroup'))
+    blood_group_counts = Donor.objects.filter(groups=drive).values('Bloodgroup').annotate(count=Count('Bloodgroup'))
     
     context = {
         'drive': drive,
-        'donors': donor_blood_group,
+        'donors': blood_group_counts,  # Corrected variable name
         'donor_list': donor_list,
         'group_id': group_id,
         'drive_name': drive_name
@@ -250,6 +244,29 @@ def transfer_to_main(request, drive_name):
 
 
 
+from django.core.mail import send_mail
+
+def register_mail(donor_name, donation_date, donation_venue, donor_email):
+    subject = "Your Generosity Saves Lives: Thank You for Donating Blood"
+    message = f"""Dear {donor_name},
+
+We hope this message finds you well.
+
+We wanted to express our heartfelt gratitude for your recent blood donation at our event held on {donation_date} at {donation_venue}. Your generosity is truly appreciated and makes a significant difference in the lives of those in need.
+
+Your donation helps save lives and ensures that patients in urgent need of blood transfusions receive the support they require. Your contribution reflects your kindness and compassion, and we are deeply grateful for your commitment to helping others.
+
+Thank you once again for your support and for being a valued member of our blood donation community.
+
+With warm regards,
+
+Certified Blood Bank
+Blood Donation Drive Team
+"""
+    sender_email = "dummy.bloodbank1@gmail.com"
+    recipient_email = [donor_email]
+
+    send_mail(subject, message, sender_email, recipient_email, fail_silently=False)
 
 
 
