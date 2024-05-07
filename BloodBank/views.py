@@ -13,6 +13,7 @@ from django.http import JsonResponse
 
 from collections import defaultdict
 from django.utils import timezone
+import winsound
 
 
 
@@ -25,7 +26,7 @@ import logging
 
 # Create your views here.
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 # @allowed_user(allowed_roles=['AdminLvl0'])
 def home(request):
     return render(request,'BloodBank/home.html')
@@ -145,6 +146,7 @@ def admin_dashboard(request):
 #     donor_blood_group = Donor.objects.filter(groups=drive).values('Bloodgroup').annotate(count=Count('Bloodgroup'))
 #     context = {'drive':drive, 'donors': donor_blood_group,'donor_list':donor_list,'group_id':group_id,'drive_name':drive_name}
 #     return render(request, 'BloodBank/drive_dets.html', context)
+#
 
 @login_required(login_url='login')
 def drive_details(request, drive_name):
@@ -180,12 +182,13 @@ def rfid_val(request):
             logger.info(f"Received RFID value: {rfid_value}")
             print(rfid_value)
             rfid_value=str(rfid_value)
-            if rfid_val in ['0000000', '1000000']:
+            if rfid_val in ['000000000', '100000000']:
                 print("Skipping adding to the database for RFID value '{}'.".format(rfid_val))
             else:
                 if rfid_value[0]=='1':
                     rfid_value=rfid_value[1:]
                     rfid_tag = RFIDTag.objects.create(RFID=rfid_value)
+                    winsound.Beep(1000, 200)
                 elif rfid_value[0]=='0':
                     rfid_value=rfid_value[1:]
                     try:

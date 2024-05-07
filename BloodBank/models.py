@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class RFIDTag(models.Model):
     RFID = models.CharField(max_length=30)
-
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
     def __str__(self):
         return self.RFID
     

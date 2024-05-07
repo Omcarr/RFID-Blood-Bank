@@ -27,8 +27,12 @@ SECRET_KEY = 'django-insecure-n*_bb=fz%=$4im(#o$egxdexm+7bp&m5^@+)^k#(=+dvh&_@d)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =["0.0.0.0","192.168.13.12","127.0.0.1",""] 
-#  "192.168.13.12"
+ALLOWED_HOSTS =["0.0.0.0","WIFI_IPV4","127.0.0.1",] #add the wifi ipv4 common for yoyr device and esp here
+# for example if wifi ipv4 was :"192.168.xx.xx"
+#commands--->
+#python manange.py runserver 0.0.0.0:8000
+#then on your browser load page at 192.168.xx.xx:8000
+#esp32 should be connected to same ip
 
 # Application definition
 
@@ -153,8 +157,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dummy.bloodbank1@gmail.com'
-EMAIL_HOST_PASSWORD ='awwm kmxo woow hlkh'
+EMAIL_HOST_USER = 'xxxx@gmail.com'
+EMAIL_HOST_PASSWORD ='xxxxxx'
 
 
 #logger module
