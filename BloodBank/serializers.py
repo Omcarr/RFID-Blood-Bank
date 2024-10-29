@@ -3,7 +3,7 @@ from .models import Donor
 
 class DonorSerializer(serializers.ModelSerializer):
     RFID = serializers.CharField(max_length=30)
-
+ 
     class Meta:
         model = Donor
         fields = ['RFID']

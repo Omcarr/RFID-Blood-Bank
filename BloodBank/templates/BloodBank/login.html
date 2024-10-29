@@ -244,6 +244,57 @@
             text-align: center;
             z-index: 999;
             padding: 6px 0;
+        
+                /* Container for alerts to manage spacing and alignment */
+            .alert-container {
+                margin: 20px 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* General alert styles */
+            .alert {
+                padding: 15px 20px;
+                margin: 10px 0;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: opacity 0.3s ease;
+            }
+
+            /* Alert info background and text color */
+            .alert-info {
+                background-color: #ffebee;  /* Light red background */
+                color: #d32f2f;             /* Dark red text */
+            }
+
+            /* Adding a warning icon to the message */
+            .alert-info .fa-exclamation-circle {
+                margin-right: 10px;
+                font-size: 20px;
+                color: #d32f2f;
+            }
+
+            /* Close button for dismissing the alert (optional) */
+            .alert .close-btn {
+                margin-left: auto;
+                background: none;
+                border: none;
+                font-size: 18px;
+                color: #d32f2f;
+                cursor: pointer;
+                padding: 0 10px;
+            }
+
+            .alert .close-btn:hover {
+                color: #b71c1c;
+            }
+
+
         }
     </style>
 </head>
@@ -273,10 +324,24 @@
                 {% csrf_token %}
                 <h1>Login</h1>
                 <span>or use your account</span>
+               
                 <input type="text" name="username" placeholder="Username" />
                 <input type="password" name="password" placeholder="Password" />
+
                 <a href="#">Forgot your password?</a>
                 <button type="submit">Login</button>
+                
+                {% if messages %}
+                    <div class="alert-container">
+                        {% for message in messages %}
+                            <div class="alert alert-info">
+                                <i class="fa fa-exclamation-circle"></i> {{ message }}
+                            </div>
+                            {% break %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
             </form>
             
 

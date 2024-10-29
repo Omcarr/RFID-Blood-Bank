@@ -15,8 +15,6 @@ from collections import defaultdict
 from django.utils import timezone
 import winsound
 
-
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -24,20 +22,8 @@ from .models import Donor
 from .serializers import DonorSerializer
 import logging
 
-# Create your views here.
 
-@login_required(login_url='login')
-# @allowed_user(allowed_roles=['AdminLvl0'])
-def home(request):
-    return render(request,'BloodBank/home.html')
-
-@login_required(login_url='login')
-#@allowed_user(['admin0'])
-def AdminHome(request):
-    context={}
-    return render(request,'BloodBank/adminhome.html',context)
-
-
+#login page
 @unauth_user
 def loginPage(request):
     if request.method == 'POST':
@@ -51,11 +37,37 @@ def loginPage(request):
             print('logged in')
             return redirect('admin_dashboard')
         else:
-            messages.info(request, 'Username OR password is incorrect')
+            messages.info(request, 'Username or Password is incorrect')
 
-    context = {}
+    storage = messages.get_messages(request)
+    # Pass context to template
+    context = {'messages': storage}
     return render(request, 'BloodBank/login.html', context)
-    
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required(login_url='login')
+# @allowed_user(allowed_roles=['AdminLvl0'])
+def home(request):
+    return render(request,'BloodBank/home.html')
+
+@login_required(login_url='login')
+#@allowed_user(['admin0'])
+def AdminHome(request):
+    context={}
+    return render(request,'BloodBank/adminhome.html',context)
+
+
+
 
 def logoutUser(request):
 	logout(request)
@@ -284,33 +296,25 @@ Blood Donation Drive Team
 #pie charts on admin dashboard------------------------------------------------->done
 #mail to the donor when register for a drive along with an attchment
 #add a counter to show many users have been registered through the drive ------->can be done
-#push to mainbugton on dashboad ot=r keep in local inv
-#superadmin request model: admin dashboard request button to main bank
-#main bank accept reject
 
 
-
-# @api_view(['GET', 'POST'])
-# def rfid_val(request):
-#     if request.method == 'POST':
-#         serializer = DonorSerializer(data=request.data)
-#         if serializer.is_valid():
-#             rfid_value = request.data.get('RFID', None)
-#             logger.info(f"Received RFID value: {rfid_value}")
-#             print(rfid_value)  # Print the received RFID value
-#             # Process rfid_value as needed
-
-#             # Render the template with the RFID value
-#             return render(request, 'BloodBank/rfid_val.html', {'rfid_value': rfid_value})
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     # elif request.method == 'GET':
-#     #     logger.info("GET request received")
-#     #     # Handle GET requests (optional)
-#     #     return Response("GET request received", status=status.HTTP_200_OK)
+#do:
 
 
+# normal user: login/create an account, has a dashboard with past donation details, load the certificates, give an option to search for blood
 
-#FIXES
-# admin regsiter blackbox
-#login page css
+# donation opprtunities nearby, provide him with atmost 3 nearby locations to get the required blood
+
+# drive supervisior: can create drive, can add new donors or use the same username or password to be added
+
+# testing team: give an option to update the blood packet status individually and by the lot. can send the report to the user via mail in case of issue with the blood
+
+# blood bank admin: can oversee all drive supervisior details, testing team details, can publisise the details about current packet status
+#can cahnge status of blood packets to used
+#can ask for blood packets to the superadmin, can give blood packest to superadmin
+
+# each blood bank has multiple drive supervisiors, one testing team account, 
+
+# super admin: receives the packet info from blood bank admins and upload the stats to home page search bar
+
 
