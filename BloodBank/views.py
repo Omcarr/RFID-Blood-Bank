@@ -289,32 +289,3 @@ Blood Donation Drive Team
 
 
 
-
-#to-do
-#make a error 404 page with link back to home
-#unique drive name fix------------------------------------------------->done
-#pie charts on admin dashboard------------------------------------------------->done
-#mail to the donor when register for a drive along with an attchment
-#add a counter to show many users have been registered through the drive ------->can be done
-
-
-#do:
-
-
-# normal user: login/create an account, has a dashboard with past donation details, load the certificates, give an option to search for blood
-
-# donation opprtunities nearby, provide him with atmost 3 nearby locations to get the required blood
-
-# drive supervisior: can create drive, can add new donors or use the same username or password to be added
-
-# testing team: give an option to update the blood packet status individually and by the lot. can send the report to the user via mail in case of issue with the blood
-
-# blood bank admin: can oversee all drive supervisior details, testing team details, can publisise the details about current packet status
-#can cahnge status of blood packets to used
-#can ask for blood packets to the superadmin, can give blood packest to superadmin
-
-# each blood bank has multiple drive supervisiors, one testing team account, 
-
-# super admin: receives the packet info from blood bank admins and upload the stats to home page search bar
-
-
